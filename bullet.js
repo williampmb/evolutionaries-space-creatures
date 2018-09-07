@@ -6,11 +6,9 @@ function Bullet(x, y,target) {
   this.position = createVector(x, y);
   this.velocity = p5.Vector.sub(target, this.position);
 
-  this.r = 3;
-  this.maxforce = 0.5;
   this.maxspeed = 2;
   this.velocity.setMag(this.maxspeed);
-  this.health = 100;
+  this.damage = 0.1;
   this.target = target;
 
   var offsetPos = p5.Vector.sub(this.target, this.position);
@@ -21,8 +19,6 @@ function Bullet(x, y,target) {
 }
 
 Bullet.prototype.update = function(){
-  //var desired = p5.Vector.sub(this.target, this.position);
-  //this.velocity = desired;
   this.velocity.limit(this.maxspeed);
   this.position.add(this.velocity);
 }
@@ -36,8 +32,6 @@ Bullet.prototype.display = function() {
   fill(255, 255, 0);
   noStroke();
   ellipse(0, 0, 4);
-  //stroke(255, 0, 255, 255);
-  //line(0, 0, 0, 10);
   endShape(CLOSE);
   pop();
 }
@@ -46,7 +40,7 @@ Bullet.prototype.doHit = function(listObj){
   for(var i = 0 ; i < listObj.length ; i++){
       var dist = p5.Vector.dist(this.position, listObj[i].position);
       if(dist <3){
-        listObj[i].health -= 0.5;
+        listObj[i].health -= this.damage;
         return true;
       }
   }
@@ -54,7 +48,7 @@ Bullet.prototype.doHit = function(listObj){
 }
 
 Bullet.prototype.outOfBounds = function(){
-  var d = 30;
+  var d = 10;
   if (this.position.x < d || this.position.x > width - d || this.position.y < d || this.position.y > height - d) {
     return true;
   }

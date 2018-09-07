@@ -183,6 +183,7 @@ Vehicle.prototype.display = function() {
   vertex(0, -this.r * 2);
   vertex(-this.r, this.r * 2);
   vertex(this.r, this.r * 2);
+  text(this.id, -5, 20);
   endShape(CLOSE);
   pop();
 }
