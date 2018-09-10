@@ -6,7 +6,7 @@ function Bullet(x, y,target) {
   this.position = createVector(x, y);
   this.velocity = p5.Vector.sub(target, this.position);
 
-  this.maxspeed = 2;
+  this.maxspeed = 3;
   this.velocity.setMag(this.maxspeed);
   this.damage = 0.1;
   this.target = target;

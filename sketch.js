@@ -15,6 +15,9 @@ var nutrition = [0.1, -1];
 
 var bullets = [];
 
+//Range to find the food
+var rangeFood = 5;
+
 // Show additional info on DNA?
 var debug;
 
@@ -33,7 +36,7 @@ function setup() {
   }
   // Start with some food
   for (var i = 0; i < 10; i++) {
-    food[i] = createVector(random(width), random(height));
+    food[i] = new Food();
   }
 
 }
@@ -48,23 +51,15 @@ function draw() {
 
   // 10% chance of new food
   if (random(1) < 0.01) {
-    food.push(createVector(random(width), random(height)));
+    food.push(new Food());
   }
 
   // Go through all vehicles
   for (var i = population.length - 1; i >= 0; i--) {
     var v = population[i];
 
-    // Eat the food (index 0)
-    v.eat(food, 0);
+    v.behave();
 
-    var bullet = v.shoot(population, bullets);
-
-    // Check boundaries
-    v.boundaries();
-
-    // Update and draw
-    v.update();
     v.display();
 
     // If the vehicle has died, remove
@@ -82,9 +77,11 @@ function draw() {
 
   // Draw all the food
   for (var i = 0; i < food.length; i++) {
-    fill(0, 255, 0);
-    noStroke();
-    ellipse(food[i].x, food[i].y, 4);
+    if(food[i].dead()){
+      food.splice(i,1);
+      continue;
+    }
+    food[i].display();
   }
 
   for (var i = bullets.length -1; i >=0 ; i--) {
@@ -95,12 +92,7 @@ function draw() {
       continue;
     }
 
-    if(curBullet.velocity.mag() == 0){
-      bullets.splice(i, 1);
-      continue;
-    }
-
-    if(curBullet.outOfBounds()){
+    if(curBullet.outOfBounds() || curBullet.velocity.mag() == 0){
       bullets.splice(i, 1);
       continue;
     }
