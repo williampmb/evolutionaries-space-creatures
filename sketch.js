@@ -15,19 +15,25 @@ var nutrition = [0.1, -1];
 
 var bullets = [];
 
-//Range to find the food
-var rangeFood = 5;
 
 // Show additional info on DNA?
 var debug;
+var numbVehicle;
+var numbFood;
+var canvas;
+
 
 function setup() {
 
   // Add canvas and grab checkbox
-  var canvas = createCanvas(800, 600);
+  canvas = createCanvas(800, 600);
   canvas.parent('canvascontainer');
   debug = select('#debug');
+  numbVehicle = createElement('p','0' );
+  numbVehicle.position(canvas.width+10,0);
 
+  numbFood = createElement('p','0' );
+  numbFood.position(canvas.width+10,20);
 
   // Create 10 vehicles
   angleMode(RADIANS);
@@ -35,7 +41,7 @@ function setup() {
     population[i] = new Vehicle(width / 2, height / 2);
   }
   // Start with some food
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 200; i++) {
     food[i] = new Food();
   }
 
@@ -50,7 +56,7 @@ function draw() {
   background(0);
 
   // 10% chance of new food
-  if (random(1) < 0.01) {
+  if (random(1) < 0.1 && food.length<200) {
     food.push(new Food());
   }
 
@@ -70,7 +76,7 @@ function draw() {
       // Every vehicle has a chance of cloning itself
       var child = v.birth();
       if (child != null) {
-        //population.push(child);
+        population.push(child);
       }
     }
   }
@@ -100,6 +106,9 @@ function draw() {
 
   }
 
+
+  numbVehicle.html('vehicle:' + population.length);
+  numbFood.html('food:' + food.length);
 
 
 
