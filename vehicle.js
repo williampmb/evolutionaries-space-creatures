@@ -1,4 +1,6 @@
 var vehicleIdCount = 0
+//var ancestry base on colors. for now, we will hav ejust 4 colors. 1 - YELLOW/2 - CYAN/3 - MAGENTA
+
 // Create a new vehicle
 function Vehicle(x, y, dna) {
 
@@ -12,8 +14,9 @@ function Vehicle(x, y, dna) {
   this.velocity.setMag(this.maxspeed);
   this.firerate = 0;
   this.cooldown = random(1, 15);
-  this.id = vehicleIdCount;
-  vehicleIdCount++;
+  this.id = vehicleIdCount++;
+  this.color = floor(random(1,2));
+
 
   // Did it receive DNA to copy?
   if (dna instanceof Array) {
@@ -66,7 +69,8 @@ Vehicle.prototype.display = function() {
   // Color based on health
   var green = color(0, 255, 0);
   var red = color(255, 0, 0);
-  var col = lerpColor(red, green, this.health)
+  //var col = lerpColor(red, green, this.health)
+  var col = lerpColor(red, green, this.health);
 
   // Draw a triangle rotated in the direction of velocity
   var theta = this.velocity.heading() + PI / 2;
@@ -221,7 +225,7 @@ Vehicle.prototype.shoot = function(list, bullets){
     var d = p5.Vector.dist(this.position, closest.position);
     // If it's within perception radius
 
-    if (d < this.dna[4]) {
+    if (d < this.dna[4] && this.color != closest.color) {
       var towards = createVector(closest.position.x,closest.position.y);
       var hit = new Bullet(this.position.x,this.position.y, towards);
       bullets.push(hit);
